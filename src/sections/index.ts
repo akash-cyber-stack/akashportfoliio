@@ -5,3 +5,4 @@ export { default as SkillsSection } from './SkillsSection';
 export { default as ProjectsSection } from './ProjectsSection';
 export { default as ContactSection } from './ContactSection';
 export { default as TechStackSection } from './TechStackSection';
+export { default as AIShowcaseSection } from './AIShowcaseSection';

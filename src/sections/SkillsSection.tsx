@@ -1,71 +1,103 @@
 "use client";
+
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { FaReact, FaNodeJs, FaAws, FaHtml5, FaCss3Alt, FaJs, FaDatabase, FaLinux, FaShopify, FaWordpress } from "react-icons/fa";
-import { SiTypescript, SiTailwindcss, SiNextdotjs, SiDocker, SiMongodb, SiKubernetes, SiGithubactions, SiNginx, SiFlutter, SiAngular } from "react-icons/si";
+import {
+  FaReact,
+  FaNodeJs,
+  FaAws,
+  FaHtml5,
+  FaCss3Alt,
+  FaJs,
+  FaDatabase,
+  FaLinux,
+  FaShopify,
+  FaWordpress,
+  FaShieldAlt,
+  FaUserSecret,
+  FaNetworkWired,
+  FaBug,
+  FaLock,
+  FaSearch,
+} from "react-icons/fa";
+import {
+  SiTypescript,
+  SiTailwindcss,
+  SiNextdotjs,
+  SiDocker,
+  SiMongodb,
+  SiKubernetes,
+  SiGithubactions,
+  SiNginx,
+  SiFlutter,
+  SiAngular,
+  SiKalilinux,
+} from "react-icons/si";
 
-// Typing animation subheading component
+const easeOut = [0.22, 1, 0.36, 1] as const;
+
+const typingPhrases = [
+  "Web, App, DevOps & Cybersecurity",
+  "Kali Linux · Pentesting · React · Next.js",
+  "AI-powered portfolio — ask the assistant",
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: easeOut, delay: i * 0.1 },
+  }),
+};
+
 function TypingSubheading() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.15, once: false });
-  const phrases = [
-    "Expertise in Web, App & DevOps 🚀",
-    "React, Next.js, Node.js, AWS, Docker, ...",
-    "Building modern, scalable solutions!",
-  ];
+  const inView = useInView(ref, { amount: 0.5, once: true });
   const [display, setDisplay] = useState("");
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
   const [typing, setTyping] = useState(true);
 
   useEffect(() => {
+    if (!inView) return;
     let timeout: ReturnType<typeof setTimeout>;
-    if (inView) {
-      if (typing) {
-        if (charIdx < phrases[phraseIdx].length) {
-          timeout = setTimeout(() => {
-            setDisplay((d) => d + phrases[phraseIdx][charIdx]);
-            setCharIdx((i) => i + 1);
-          }, 60);
-        } else {
-          timeout = setTimeout(() => setTyping(false), 1200);
-        }
-      } else {
+    if (typing) {
+      if (charIdx < typingPhrases[phraseIdx].length) {
         timeout = setTimeout(() => {
-          setDisplay("");
-          setCharIdx(0);
-          setTyping(true);
-          setPhraseIdx((idx) => (idx + 1) % phrases.length);
-        }, 700);
+          setDisplay((d) => d + typingPhrases[phraseIdx][charIdx]);
+          setCharIdx((i) => i + 1);
+        }, 55);
+      } else {
+        timeout = setTimeout(() => setTyping(false), 1400);
       }
     } else {
-      // Batch resets to avoid synchronous setState in effect
       timeout = setTimeout(() => {
         setDisplay("");
         setCharIdx(0);
         setTyping(true);
-        setPhraseIdx(0);
-      }, 0);
+        setPhraseIdx((idx) => (idx + 1) % typingPhrases.length);
+      }, 600);
     }
     return () => clearTimeout(timeout);
-    // eslint-disable-next-line
-  }, [charIdx, typing, inView]);
+  }, [charIdx, typing, inView, phraseIdx]);
 
   return (
-    <div ref={ref} className="mt-3 min-h-[32px] flex justify-center">
-      <span className="text-base sm:text-lg font-mono text-cyan-300 bg-black/30 px-3 py-1 rounded shadow-inner border border-cyan-900/20 animate-pulse-fast">
-        {display}
-        <span className="inline-block w-2 h-5 align-middle bg-cyan-400 ml-1 animate-blink rounded-sm" />
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 12 }}
+      animate={inView ? { opacity: 1, y: 0 } : undefined}
+      transition={{ duration: 0.5, ease: easeOut }}
+      className="mt-4 flex min-h-[2.75rem] w-full justify-center px-2"
+    >
+      <span className="inline-flex max-w-full items-center rounded-lg border border-cyan-900/30 bg-black/40 px-4 py-1.5 font-mono text-sm text-cyan-300 sm:text-base">
+        <span className="truncate">{inView ? display : "\u00a0"}</span>
+        <span
+          className="ml-1 inline-block h-4 w-0.5 shrink-0 rounded-sm bg-cyan-400"
+          style={{ animation: inView ? "skills-cursor-blink 1s step-end infinite" : "none" }}
+        />
       </span>
-      <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        .animate-blink { animation: blink 1s steps(2, start) infinite; }
-        .animate-pulse-fast { animation: pulse 1.2s cubic-bezier(.4,0,.6,1) infinite; }
-      `}</style>
-    </div>
+    </motion.div>
   );
 }
 
@@ -114,117 +146,166 @@ const skillCategories: SkillCategory[] = [
       { name: "Linux", icon: <FaLinux className="text-gray-300" />, level: "Expert" },
     ],
   },
+  {
+    title: "Cybersecurity",
+    color: "from-red-500 via-orange-500 to-amber-400",
+    skills: [
+      { name: "Kali Linux", icon: <SiKalilinux className="text-blue-400" />, level: "Advanced" },
+      { name: "Penetration Testing", icon: <FaUserSecret className="text-red-400" />, level: "Intermediate" },
+      { name: "Network Security", icon: <FaNetworkWired className="text-green-400" />, level: "Advanced" },
+      { name: "OWASP Top 10", icon: <FaShieldAlt className="text-orange-400" />, level: "Intermediate" },
+      { name: "Burp Suite", icon: <FaBug className="text-amber-300" />, level: "Intermediate" },
+      { name: "Nmap / Wireshark", icon: <FaSearch className="text-cyan-300" />, level: "Advanced" },
+      { name: "Metasploit", icon: <FaLinux className="text-red-300" />, level: "Intermediate" },
+      { name: "Security Auditing", icon: <FaLock className="text-yellow-400" />, level: "Advanced" },
+    ],
+  },
 ];
 
 type SkillCardProps = { cat: SkillCategory; i: number };
+
 function SkillCard({ cat, i }: SkillCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(cardRef, { amount: 0.15, once: false });
+  const inView = useInView(cardRef, { amount: 0.2, once: true, margin: "0px 0px -80px 0px" });
+
   return (
-    <motion.div
+    <motion.article
       ref={cardRef}
-      initial={{ opacity: 0, y: 80, scale: 0.95, rotateX: 30 }}
-      animate={inView
-        ? { opacity: 1, y: 0, scale: 1, rotateX: 0 }
-        : { opacity: 0, y: -120, scale: 0.92, rotateX: -30 }}
-      transition={{ duration: 0.7, ease: "backOut", delay: i * 0.2 }}
-      className="w-full flex flex-col md:flex-row items-center justify-between bg-[#18181c] bg-opacity-95 rounded-3xl shadow-2xl border border-white/10 pt-5 pb-8 px-4 md:pt-7 md:pb-12 md:px-12"
-      style={{ minHeight: 420, zIndex: 10, boxShadow: "0 8px 48px 0 #000a, 0 1.5px 0 #222" }}
+      custom={i}
+      variants={fadeUp}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      className="w-full overflow-hidden rounded-3xl border border-white/10 bg-[#18181c]/95 shadow-2xl"
+      style={{ boxShadow: "0 8px 48px 0 #000a, 0 1.5px 0 #222" }}
     >
-      {/* Left: Icon grid */}
-      <div className="flex-1 flex items-center justify-center mb-8 md:mb-0">
-        <div className="grid grid-cols-3 gap-6">
-          {cat.skills.map((skill: Skill, j: number) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, scale: 0.7, rotateY: -30 }}
-              whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 + j * 0.07 }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-black/40 group-hover:bg-black/50 transition-colors duration-300 shadow"
-            >
-              <span className="text-3xl md:text-4xl mb-1 drop-shadow-lg">{skill.icon}</span>
-              <span className="font-medium text-zinc-100 text-base md:text-lg">{skill.name}</span>
-              <span className="text-xs text-cyan-200 font-mono">{skill.level}</span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-      {/* Right: Details */}
-      <div className="flex-1 flex flex-col items-start md:items-start justify-center md:pl-12">
-        <h3 className={`text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r ${cat.color} text-transparent bg-clip-text`}>{cat.title}</h3>
-        <ul className="mb-6 space-y-2">
-          {cat.skills.map((skill: Skill) => (
-            <li key={skill.name} className="flex items-center gap-2 text-lg">
-              <span className="inline-block align-middle">{skill.icon}</span>
-              <span className="align-middle font-semibold text-zinc-100">{skill.name}</span>
-              <span className="text-xs text-cyan-300 ml-2">{skill.level}</span>
-            </li>
-          ))}
-        </ul>
-        <button
-          className="mt-2 px-7 py-3 rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 text-white font-semibold text-lg shadow-lg hover:scale-105 transition-transform relative overflow-hidden group"
-          onClick={() => {
-            const el = document.querySelector('#contact');
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.45, ease: easeOut, delay: 0.08 + i * 0.1 }}
+        className="flex w-full flex-col items-center justify-between px-4 py-8 md:flex-row md:px-12 md:py-10"
+      >
+        <motion.div
+          className="mb-8 flex flex-1 items-center justify-center md:mb-0"
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.04, delayChildren: 0.15 + i * 0.1 } },
           }}
         >
-          <span className="relative z-10">Learn More</span>
-          <span className="absolute left-0 bottom-0 w-full h-0 group-hover:h-full bg-black/70 transition-all duration-300 z-0 rounded-b-full" />
-        </button>
-      </div>
-    </motion.div>
+          <motion.div
+            className="grid grid-cols-3 gap-4 sm:gap-6"
+            variants={{
+              hidden: {},
+              visible: {},
+            }}
+          >
+            {cat.skills.map((skill: Skill) => (
+              <motion.div
+                key={skill.name}
+                variants={{
+                  hidden: { opacity: 0, scale: 0.92 },
+                  visible: { opacity: 1, scale: 1, transition: { duration: 0.35, ease: easeOut } },
+                }}
+                className="flex flex-col items-center gap-2 rounded-xl bg-black/40 p-3 shadow transition-colors duration-300 hover:bg-black/55"
+              >
+                <span className="mb-1 text-3xl drop-shadow-lg md:text-4xl">{skill.icon}</span>
+                <span className="text-center text-sm font-medium text-zinc-100 md:text-base">{skill.name}</span>
+                <span className="font-mono text-xs text-cyan-200">{skill.level}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="flex flex-1 flex-col items-start justify-center md:pl-12"
+          initial={{ opacity: 0, x: 16 }}
+          animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 }}
+          transition={{ duration: 0.5, ease: easeOut, delay: 0.2 + i * 0.1 }}
+        >
+          <h3
+            className={`mb-4 bg-gradient-to-r ${cat.color} bg-clip-text text-2xl font-bold text-transparent sm:text-3xl`}
+          >
+            {cat.title}
+          </h3>
+          <ul className="mb-6 max-h-48 space-y-2 overflow-y-auto pr-1 sm:max-h-none">
+            {cat.skills.map((skill: Skill) => (
+              <li key={skill.name} className="flex items-center gap-2 text-base sm:text-lg">
+                <span className="inline-block shrink-0">{skill.icon}</span>
+                <span className="font-semibold text-zinc-100">{skill.name}</span>
+                <span className="ml-auto text-xs text-cyan-300 sm:ml-2">{skill.level}</span>
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            className="group relative mt-2 overflow-hidden rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 px-7 py-3 text-lg font-semibold text-white shadow-lg transition-transform hover:scale-[1.03] active:scale-[0.98]"
+            onClick={() => {
+              document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+          >
+            <span className="relative z-10">Learn More</span>
+            <span className="absolute inset-x-0 bottom-0 z-0 h-0 rounded-b-full bg-black/60 transition-all duration-300 group-hover:h-full" />
+          </button>
+        </motion.div>
+      </motion.div>
+    </motion.article>
   );
 }
 
 export default function SkillsSection() {
-  // Removed unused activeIndex state
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      // let idx = Math.floor((scrollY - offset) / cardHeight);
-      // idx = Math.max(0, Math.min(skillCategories.length - 1, idx));
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerInView = useInView(headerRef, { amount: 0.6, once: true });
 
   return (
     <section
       id="skills"
-      ref={sectionRef}
-      className="relative w-full pt-40 pb-32 px-4 sm:px-8 bg-gradient-to-br from-[#050509] via-[#0a0a0a] to-[#050509] text-white flex flex-col items-center min-h-[100vh]"
+      className="relative flex w-full scroll-mt-28 flex-col items-center bg-gradient-to-br from-[#050509] via-[#0a0a0a] to-[#050509] px-4 py-24 text-white sm:px-8 sm:py-28"
     >
-      <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "backOut" }}
-        viewport={{ once: false, amount: 0.15 }}
-        className="z-30 w-full flex flex-col items-center justify-center mb-8"
-        style={{ pointerEvents: "none", position: 'absolute', top: '32px', left: 0, right: 0 }}
+      <motion.header
+        ref={headerRef}
+        initial={{ opacity: 0, y: 20 }}
+        animate={headerInView ? { opacity: 1, y: 0 } : undefined}
+        transition={{ duration: 0.55, ease: easeOut }}
+        className="z-10 mb-14 flex w-full max-w-3xl flex-col items-center text-center"
       >
-        <div className="bg-[#18181c] rounded-xl px-4 py-1 shadow-lg">
+        <div className="rounded-xl bg-[#18181c] px-5 py-2 shadow-lg">
           <h2
-            className="text-2xl sm:text-3xl font-bold text-white tracking-tight m-0"
-            style={{ fontFamily: 'Montserrat, Poppins, sans-serif', fontWeight: 700, letterSpacing: '0.01em' }}
+            className="m-0 text-2xl font-bold tracking-tight text-white sm:text-3xl"
+            style={{ fontFamily: "Montserrat, Poppins, sans-serif", fontWeight: 700, letterSpacing: "0.01em" }}
           >
             My Skills
           </h2>
         </div>
         <TypingSubheading />
-      </motion.div>
-      <div
-        className="relative w-full max-w-3xl flex flex-col items-center justify-center mt-24 gap-16"
-        style={{ perspective: 1200 }}
+      </motion.header>
+
+      <motion.div
+        className="relative flex w-full max-w-3xl flex-col items-center gap-12 sm:gap-14"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.05, margin: "0px 0px -60px 0px" }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12 } },
+        }}
       >
         {skillCategories.map((cat, i) => (
           <SkillCard key={cat.title} cat={cat} i={i} />
         ))}
-      </div>
+      </motion.div>
+
+      <style jsx global>{`
+        @keyframes skills-cursor-blink {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0;
+          }
+        }
+      `}</style>
     </section>
   );
 }
-// ...existing code ends here

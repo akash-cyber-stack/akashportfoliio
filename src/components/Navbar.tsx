@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FaHome, FaUser, FaCode, FaProjectDiagram, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
+import { FaHome, FaUser, FaCode, FaProjectDiagram, FaEnvelope, FaBars, FaTimes, FaRobot } from "react-icons/fa";
 
 const navLinks = [
   { label: "Home", href: "#hero", icon: <FaHome /> },
+  { label: "AI", href: "#ai", icon: <FaRobot /> },
   { label: "Features", href: "#features", icon: <FaUser /> },
   { label: "Skills", href: "#skills", icon: <FaCode /> },
   { label: "Projects", href: "#projects", icon: <FaProjectDiagram /> },

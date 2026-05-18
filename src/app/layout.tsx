@@ -6,6 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
+import PortfolioAIChat from "@/components/PortfolioAIChat";
 import useShowLoader from "@/hooks/useShowLoader";
 import "./globals.css";
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {!showLoader && children}
         </main>
         <Footer />
+        {!showLoader && <PortfolioAIChat />}
       </body>
     </html>
   );

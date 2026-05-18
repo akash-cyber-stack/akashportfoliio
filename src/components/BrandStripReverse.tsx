@@ -17,7 +17,7 @@ export default function BrandStripReverse() {
     <div className="relative w-full overflow-x-hidden py-8 animated-net-bg">
       <div className="absolute inset-0 bg-black opacity-60 pointer-events-none" />
       <div className="relative flex items-center justify-center">
-        <div className="animate-marquee-reverse flex gap-24 w-full justify-center min-[400px]:mx-auto min-[400px]:justify-center sm:min-w-full">
+        <div className="animate-marquee-reverse flex gap-24 w-full justify-center sm:min-w-full">
           {uniqueNames.map((name, i) => (
             <div key={"orig-" + i} className="flex-shrink-0 flex items-center justify-center h-16">
               <span className="text-2xl font-bold text-white/90 select-none">{name}</span>
