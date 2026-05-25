@@ -198,6 +198,23 @@ const projects = [
 
   },
 
+  {
+
+    title: "Sales CRM IPI",
+
+    image: "/CRM.png",
+
+    description:
+
+      "A modern CRM web app for sales teams, featuring authentication, dashboards, and lead management. Built with Next.js and deployed on Vercel.",
+
+    tech: ["Next.js", "React", "TypeScript", "Tailwind", "Vercel", "Neon DB", "Prisma"],
+
+    demo: "https://sales-crm-ipi.vercel.app/login",
+    github: "https://github.com/akash-cyber-stack/Client-CRM-software",
+
+  },
+
 ];
 
 
